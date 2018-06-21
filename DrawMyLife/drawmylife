@@ -1,0 +1,14 @@
+#!/bin/python3
+import random, os, time
+
+def heyListenMyLife(messages):
+    for msg in messages:
+        if msg:
+            os.system("ffplay -nodisp bip.mp3 1>&2 2> /dev/null &")
+            os.system('notify-send -t 10000 -i ~/TrollScript/DrawMyLife/me.png "Elden the Dragon" "{}"'.format(msg))
+            time.sleep(random.randint(0, 4) + 3)
+
+with open("salutations.txt") as fd: heyListenMyLife(fd.read().split('\n'))
+files = os.listdir('txt')
+f = random.choice(files)
+with open ("txt/" + f) as fd : heyListenMyLife(fd.read().split('\n'));
