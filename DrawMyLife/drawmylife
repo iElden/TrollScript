@@ -1,14 +1,19 @@
 #!/bin/python3
 import random, os, time
 
+REPO_PATH = "{}/TrollScript/DrawMyLife/".format(os.getenv("HOME"))
+
 def heyListenMyLife(messages):
     for msg in messages:
         if msg:
-            os.system("ffplay -nodisp bip.mp3 1>&2 2> /dev/null &")
-            os.system('notify-send -t 10000 -i ~/TrollScript/DrawMyLife/me.png "Elden the Dragon" "{}"'.format(msg))
+            os.system("ffplay -autoexit -nodisp {}bip.mp3 1>/dev/null 2>/dev/null &".format(REPO_PATH))
+            os.system('notify-send -t 10000 -i {}me.png "Elden the Dragon" "{}" > /dev/null'.format(REPO_PATH, msg))
             time.sleep(random.randint(0, 4) + 3)
 
-with open("salutations.txt") as fd: heyListenMyLife(fd.read().split('\n'))
-files = os.listdir('txt')
-f = random.choice(files)
-with open ("txt/" + f) as fd : heyListenMyLife(fd.read().split('\n'));
+with open("{}salutations.txt".format(REPO_PATH)) as fd: heyListenMyLife(fd.read().split('\n'))
+while True:
+    files = os.listdir("{}txt".format(REPO_PATH))
+    while files:
+        f = random.choice(files)
+        files.remove(f)
+        with open ("{}txt/{}".format(REPO_PATH, f)) as fd : heyListenMyLife(fd.read().split('\n'));
