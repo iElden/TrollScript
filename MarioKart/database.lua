@@ -15,7 +15,9 @@ return {
     },
     base = {
         loadFct = function ()
-            os.execute(("sleep %f"):format(math.random(50, 100) / 10))
+            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+                return true
+            end
         end,
         name = "Rolling",
         effect = "",
@@ -33,7 +35,7 @@ return {
         end,
         name = "Star",
         effect = "",
-        description = "You are invicible for 30 seconds",
+        description = "You are invincible for 30 seconds",
         image = "star.png",
         sound = "star.mp3",
         delay = 30,
@@ -55,37 +57,58 @@ return {
     {
         name = "Bullet bill",
         startFct = function ()
-            local time = os.time()
-            
-            repeat until time + 10 < os.time()
+            os.execute("lua bulletbill.lua &")
+            os.execute("lua bulletbill.lua &")
+            os.execute("lua bulletbill.lua &")
+            os.execute("lua bulletbill.lua &")
         end,
         effect = "",
         description = "Hyper speed !",
         image = "billou.png",
-        delay = 0,
+        delay = 10,
         notifDelay = 10
     },
     {
         name = "Banana",
         startFct = function ()
-            for i = 1, 5 do
-                os.execute('sleep 0.2')
+            for i = 1, 2 do
+                if
+                    not os.execute('sleep 0.2') or
+                    not os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted') or
+                    not os.execute('sleep 0.2') or
+                    not os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
+                then
+                    return true
+                end
+            end
+        end,
+        effect = "",
+        description = "Your screen slips off the banana",
+        image = "banana.png",
+        sound = "hit.mp3",
+        delay = 8,
+        notifDelay = 10
+    },
+    {
+        name = "Triple bananas",
+        startFct = function ()
+            for i = 1, 6 do
                 os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted')
-                os.execute('sleep 0.2')
                 os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
             end
         end,
         effect = "",
-        description = "",
-        image = "banana.png",
-        delay = 5,
+        description = "Your screen slips off the bananas",
+        image = "bananas.png",
+        sound = "hit.mp3",
+        delay = 6,
         notifDelay = 10
     },
     {
         name = "Thunder",
         startFct = function ()
             local pfile = io.popen("xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '")
-            
+
             currentBrightness = tonumber(pfile:read())
             for i = 1, 10 do
                 os.execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %s'):format(i % 2 == 1 and "0" or "inf"))
@@ -99,8 +122,12 @@ return {
         sound = "storm.mp3",
         endFct = function ()
             for i = 1, 10 do
-                os.execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %f'):format(0.2 + 0.8 * currentBrightness * i / 10))
-                os.execute("sleep 0.025")
+                if
+                    not os.execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %f'):format(0.2 + 0.8 * currentBrightness * i / 10)) or
+                    not os.execute("sleep 0.025")
+                then
+                    return true
+                end
             end
         end,
         delay = 10,

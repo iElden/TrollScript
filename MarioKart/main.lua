@@ -4,7 +4,9 @@ database = dofile("./database.lua")
 
 function executePayload(element)
     if element.loadFct then
-        element.loadFct()
+        if element.loadFct() then
+            return false
+        end
     end
     os.execute(("notify-send --icon=`pwd`/pictures/%s -t %i '%s' '%s'"):format(element.image, (element.notifDelay or element.delay) * 1000, element.name, element.description))
     if element.sound then
@@ -43,13 +45,21 @@ function main(...)
     if not database then
         error("Cannot load database")
     end
-    executePayload(database.begin)
-    while executePayload(database.base) and executePayload(database[math.random(1, #database)]) do end
+    if executePayload(database.begin) then
+        while executePayload(database.base) and executePayload(database[math.random(1, #database)]) do end
+        error("interrupted!")
+    else
+        error("interrupted!")
+    end
 end
 
 local success, err = pcall(main, ...)
 
 if not success then
-    os.execute(string.format('notify-send "Error" "%s" && ffplay -autoexit -nodisp sounds/boule_noire.mp3 &>/dev/null &', err))
-    print(err)
+    if err:sub(#err - #"interrupted!" + 1, #err) == "interrupted!" then
+        os.execute("ffplay -autoexit -nodisp sounds/quit.mp3 &>/dev/null &")
+    else
+        os.execute(string.format('notify-send "Error" "%s" && ffplay -autoexit -nodisp sounds/boule_noire.mp3 &>/dev/null &', err))
+        print(err)
+    end
 end
