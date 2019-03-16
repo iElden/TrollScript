@@ -236,5 +236,33 @@ return {
             end
         end,
         delay = 5
+    },
+    {
+        name = "Boo",
+        startFct = function ()
+            local pfile = io.popen("./xdotool get_num_desktops")
+            local nbOfWorkSpaces = tonumber(pfile:read())
+            pfile:close()
+
+            pfile = io.popen("./xdotool search '.*' 2>/dev/null")
+            pfile:read()
+            line = pfile:read()
+            while line do
+                local pFile = io.popen("./xdotool getwindowname "..line)
+                local name = pFile:read()
+
+                if name and name ~= "" and name ~= "wrapper-1.0" and name ~= "wrapper-2.0" and not name:gmatch("xf.*")() then
+                    os.execute("./xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
+                end
+                pFile:close()
+                line = pfile:read()
+            end
+            pfile:close()
+        end,
+        effect = '',
+        description = "Shuffle time",
+        image = "ghost.png",
+        sound = "ghost.mp3",
+        delay = 2,
     }
 }
