@@ -1,6 +1,7 @@
 #!/bin/lua
 
-database = dofile("./database.lua")
+require("signal")
+local database = dofile("./database.lua")
 
 function executePayload(element)
     if element.loadFct then
@@ -16,7 +17,7 @@ function executePayload(element)
         element.startFct()
     end
     os.execute(element.effect)
-    if not os.execute(("sleep %i"):format(element.delay)) then
+    if not os.execute(("sleep %f"):format(element.delay)) then
         return false
     end
     if element.endFct then
@@ -35,13 +36,14 @@ function getValue(tab, key, fct)
 end
 
 function main(...)
+    math.randomseed(os.time())
     if #{...} ~= 0 then
+        signal.signal("SIGTERM", function () end)
         for i, k in pairs({...}) do
             executePayload(getValue(database, k, function (elem) return elem.name end))
         end
         return
     end
-    math.randomseed(os.time())
     if not database then
         error("Cannot load database")
     end
@@ -53,6 +55,15 @@ function main(...)
     end
 end
 
+signal.signal("SIGTERM", function ()
+    os.execute("ffplay -autoexit -nodisp sounds/quit.mp3 &>/dev/null &") 
+    if musicPID then
+        os.execute("kill "..musicPID)
+        musicPID = nil
+    end
+    os.exit(0)
+end)
+
 local success, err = pcall(main, ...)
 
 if not success then
@@ -61,5 +72,9 @@ if not success then
     else
         os.execute(string.format('notify-send "Error" "%s" && ffplay -autoexit -nodisp sounds/boule_noire.mp3 &>/dev/null &', err))
         print(err)
+    end
+    if musicPID then
+        os.execute("kill "..musicPID)
+        musicPID = nil
     end
 end

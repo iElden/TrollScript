@@ -132,5 +132,109 @@ return {
         end,
         delay = 10,
         notifDelay = 14
+    },
+    {
+        name = "Triple mushroom",
+        startFct = function ()
+            local pfile = io.popen("xinput --list --short")
+            local line
+
+            mouseDevices = {}
+            pfile:read()
+            pfile:read()
+            line = pfile:read()
+            while line and line:sub(1, 3) ~= "⎣" do
+                table.insert(mouseDevices, line:gmatch("id=[0-9]+")():gmatch("[0-9]+")())
+                line = pfile:read()
+            end
+            pfile:close()
+            for i = 1, 3 do
+                local sensitivity = math.random(20, 90) / 10
+
+                for i, k in pairs(mouseDevices) do
+                    os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+                end
+                os.execute("sleep 2")
+            end
+        end,
+        effect = '',
+        description = "Faster faster faster !",
+        image = "triple_mushroom.png",
+        sound = "triple_mushroom.mp3",
+        endFct = function ()
+            for i, k in pairs(mouseDevices) do
+                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+            end
+        end,
+        delay = 4,
+        notifDelay = 10
+    },
+    {
+        name = "Golden mushroom",
+        startFct = function ()
+            local pfile = io.popen("xinput --list --short")
+            local line
+            local sensitivity = math.random(20, 50) / 10
+
+            mouseDevices = {}
+            pfile:read()
+            pfile:read()
+            line = pfile:read()
+            while line and line:sub(1, 3) ~= "⎣" do
+                table.insert(mouseDevices, line:gmatch("id=[0-9]+")():gmatch("[0-9]+")())
+                line = pfile:read()
+            end
+            pfile:close()
+            for i = 1, 14 do
+                local sensitivity = math.random(20, 200) / 10
+
+                for i, k in pairs(mouseDevices) do
+                    os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+                end
+                os.execute("sleep 0.5")
+            end
+        end,
+        effect = '',
+        description = "Faster !",
+        image = "golden_mushroom.png",
+        sound = "golden_mushroom.mp3",
+        endFct = function ()
+            for i, k in pairs(mouseDevices) do
+                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+            end
+        end,
+        delay = 0.5,
+        notifDelay = 8
+    },
+    {
+        name = "Mushroom",
+        startFct = function ()
+            local pfile = io.popen("xinput --list --short")
+            local line
+            local sensitivity = math.random(20, 50) / 10
+
+            mouseDevices = {}
+            pfile:read()
+            pfile:read()
+            line = pfile:read()
+            while line and line:sub(1, 3) ~= "⎣" do
+                table.insert(mouseDevices, line:gmatch("id=[0-9]+")():gmatch("[0-9]+")())
+                line = pfile:read()
+            end
+            pfile:close()
+            for i, k in pairs(mouseDevices) do
+                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+            end
+        end,
+        effect = '',
+        description = "Faster !",
+        image = "mushroom.png",
+        sound = "mushroom.mp3",
+        endFct = function ()
+            for i, k in pairs(mouseDevices) do
+                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+            end
+        end,
+        delay = 5
     }
 }
