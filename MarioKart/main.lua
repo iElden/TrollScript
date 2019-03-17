@@ -47,7 +47,6 @@ function main(...)
     signal.signal("SIGTERM", function ()
         if musicPID then
             os.execute("kill "..musicPID)
-            musicPID = nil
         end
         os.exit(0)
     end)
@@ -61,6 +60,10 @@ function main(...)
     else
         error("interrupted!")
     end
+end
+
+if not os.execute("ffplay -version > /dev/null") then
+    error("ffplay version check failed")
 end
 
 local success, err = pcall(main, ...)
