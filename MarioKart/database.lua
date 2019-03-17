@@ -248,7 +248,7 @@ return {
             pfile:read()
             line = pfile:read()
             while line do
-                local pFile = io.popen("./xdotool getwindowname "..line)
+                local pFile = io.popen("./xdotool getwindowname "..line.." 2>/dev/null")
                 local name = pFile:read()
 
                 if name and name ~= "" and name ~= "wrapper-1.0" and name ~= "wrapper-2.0" and not name:gmatch("xf.*")() then
