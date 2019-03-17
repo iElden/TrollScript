@@ -6,7 +6,7 @@ local database = dofile("./database.lua")
 function executePayload(element)
     if element.loadFct then
         if element.loadFct() then
-            return false
+            error("interrupted!")
         end
     end
     os.execute(("notify-send --icon=`pwd`/pictures/%s -t %i '%s' '%s'"):format(element.image, (element.notifDelay or element.delay) * 1000, element.name, element.description))
@@ -18,12 +18,11 @@ function executePayload(element)
     end
     os.execute(element.effect)
     if not os.execute(("sleep %f"):format(element.delay)) then
-        return false
+        error("interrupted!")
     end
     if element.endFct then
         element.endFct()
     end
-    return true
 end
 
 function getValue(tab, key, fct)
@@ -54,11 +53,20 @@ function main(...)
     if not database then
         error("Cannot load database")
     end
-    if executePayload(database.begin) then
-        while executePayload(database.base) and executePayload(database[math.random(1, #database)]) do end
-        error("interrupted!")
-    else
-        error("interrupted!")
+    executePayload(database.begin)
+    while true do
+        executePayload(database.base)
+        executePayload(database[math.random(1, #database)])
+        if math.random(1, 30) == 1 then
+            if turn == 1 then
+                executePayload(database.newTurn)
+            elseif turn == 2 then
+                executePayload(database.lastTurn)
+            elseif turn == 3 then
+                executePayload(database.endCourse)
+                executePayload(database.begin)
+            end
+        end
     end
 end
 

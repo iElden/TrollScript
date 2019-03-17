@@ -7,10 +7,11 @@ return {
         sound = "begin.mp3",
         delay = 11,
         endFct = function ()
-            local pfile = io.popen("ffplay -autoexit -nodisp sounds/music.mp3 -volume 50 &>/dev/null &\necho $!")
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
+            turn = 1
         end,
     },
     base = {
@@ -26,6 +27,62 @@ return {
         sound = "rolling.mp3",
         delay = 4
     },
+    newTurn = {
+        loadFct = function ()
+            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+                return true
+            end
+            turn = turn + 1
+        end,
+        name = "Lap 2",
+        effect = "",
+        description = "Lap 2/3",
+        image = "final_lap.png",
+        sound = "end_of_turn.mp3",
+        delay = 4
+    },
+    lastTurn = {
+        loadFct = function ()
+            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+                return true
+            end
+            turn = turn + 1
+            if musicPID then
+                os.execute("kill "..musicPID)
+                musicPID = nil
+            end
+        end,
+        name = "Last lap !",
+        effect = "",
+        description = "Lap 3/3",
+        image = "final_lap.png",
+        sound = "final_lap.mp3",
+        endFct = function ()
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            
+            musicPID = pfile:read()
+            pfile:close()
+        end,
+        delay = 3
+    },
+    endCourse = {
+        loadFct = function ()
+            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+                return true
+            end
+            turn = turn + 1
+            if musicPID then
+                os.execute("kill "..musicPID)
+                musicPID = nil
+            end
+        end,
+        name = "Finish !",
+        effect = "",
+        description = "Course finished !",
+        image = "final_lap.png",
+        sound = "end.mp3",
+        delay = 12
+    },
     {
         startFct = function ()
             if musicPID then
@@ -40,7 +97,7 @@ return {
         sound = "star.mp3",
         delay = 30,
         endFct = function ()
-            local pfile = io.popen("ffplay -autoexit -nodisp sounds/music.mp3 -volume 50 &>/dev/null &\necho $!")
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -227,7 +284,7 @@ return {
             end
         end,
         effect = '',
-        description = "Faster !",
+        description = "I am the fast !",
         image = "mushroom.png",
         sound = "mushroom.mp3",
         endFct = function ()
