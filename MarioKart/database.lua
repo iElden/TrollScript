@@ -252,7 +252,7 @@ return {
             end
         end,
         effect = '',
-        description = "Faster !",
+        description = "Faster than ever !",
         image = "golden_mushroom.png",
         sound = "golden_mushroom.mp3",
         endFct = function ()
@@ -284,7 +284,7 @@ return {
             end
         end,
         effect = '',
-        description = "I am the fast !",
+        description = "Faster !",
         image = "mushroom.png",
         sound = "mushroom.mp3",
         endFct = function ()
