@@ -7,7 +7,7 @@ return {
         sound = "begin.mp3",
         delay = 11,
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -58,7 +58,7 @@ return {
         image = "final_lap.png",
         sound = "final_lap.mp3",
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -97,7 +97,7 @@ return {
         sound = "star.mp3",
         delay = 30,
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
