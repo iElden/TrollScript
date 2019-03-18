@@ -336,18 +336,19 @@ return {
             
             for i = 0, nbOfWorkSpaces - 1 do
                 os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
-                os.execute(("sleep %f"):format(i ^ 2 / (nbOfWorkSpaces - 1) ^ 2))
+                os.execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
             
             for i = nbOfWorkSpaces - 2, 0, -1 do
                 os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
-                os.execute(("sleep %f"):format(i ^ 2 / (nbOfWorkSpaces - 1) ^ 2))
+                os.execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
         end,
         effect = '',
         description = "Attention à la tête !",
         image = "boomerang.png",
         sound = "boomerang.mp3",
+        delay = 0,
         notifDelay = 2,
     }
 }
