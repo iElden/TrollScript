@@ -321,5 +321,33 @@ return {
         image = "ghost.png",
         sound = "ghost.mp3",
         delay = 2,
+    },
+    {
+        name = "Boomerang",
+        startFct = function ()
+            local pfile = io.popen("./xdotool get_num_desktops")
+            local nbOfWorkSpaces = tonumber(pfile:read())
+            local currentDesktop = 0
+            pfile:close()
+            
+            pfile = io.popen("./xdotool get_desktop")
+            currentDesktop = tonumber(pfile:read())
+            pfile:close()
+            
+            for i = 0, nbOfWorkSpaces - 1 do
+                os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                os.execute(("sleep %f"):format(i ^ 2 / (nbOfWorkSpaces - 1) ^ 2))
+            end
+            
+            for i = nbOfWorkSpaces - 2, 0, -1 do
+                os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                os.execute(("sleep %f"):format(i ^ 2 / (nbOfWorkSpaces - 1) ^ 2))
+            end
+        end,
+        effect = '',
+        description = "Attention à la tête !",
+        image = "boomerang.png",
+        sound = "boomerang.mp3",
+        notifDelay = 2,
     }
 }
