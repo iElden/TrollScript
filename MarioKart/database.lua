@@ -25,7 +25,8 @@ return {
         description = "Rolling",
         image = "box.png",
         sound = "rolling.mp3",
-        delay = 4
+        delay = 4,
+	notifDelay = 3.9
     },
     newTurn = {
         loadFct = function ()

@@ -1,6 +1,6 @@
 #!/bin/lua
 
-require("signal")
+pcall(require, "signal")
 local database = dofile("./database.lua")
 
 function executePayload(element)
@@ -43,12 +43,14 @@ function main(...)
         return
     end
 
+    if signal then
     signal.signal("SIGTERM", function ()
         if musicPID then
             os.execute("kill "..musicPID)
         end
         os.exit(0)
     end)
+    end
 
     if not database then
         error("Cannot load database")
