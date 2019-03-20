@@ -44,12 +44,12 @@ function main(...)
     end
 
     if signal then
-    signal.signal("SIGTERM", function ()
-        if musicPID then
-            os.execute("kill "..musicPID)
-        end
-        os.exit(0)
-    end)
+        signal.signal("SIGTERM", function ()
+            if musicPID then
+                os.execute("kill "..musicPID)
+            end
+            os.exit(0)
+        end)
     end
 
     if not database then
