@@ -7,7 +7,7 @@ return {
         sound = "begin.mp3",
         delay = 11,
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -16,7 +16,10 @@ return {
     },
     base = {
         loadFct = function ()
-            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+			local result = math.random(50, 100) / 10
+
+			turnDistance = (turnDistance or 0) + result
+            if not execute(("sleep %f"):format(result)) then
                 return true
             end
         end,
@@ -26,11 +29,11 @@ return {
         image = "box.png",
         sound = "rolling.mp3",
         delay = 4,
-	notifDelay = 3.9
+		notifDelay = 3.9
     },
     newTurn = {
         loadFct = function ()
-            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+            if not execute(("sleep %f"):format(math.random(50, 100) / 10)) then
                 return true
             end
             turn = turn + 1
@@ -44,12 +47,12 @@ return {
     },
     lastTurn = {
         loadFct = function ()
-            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+            if not execute(("sleep %f"):format(math.random(50, 100) / 10)) then
                 return true
             end
             turn = turn + 1
             if musicPID then
-                os.execute("kill "..musicPID)
+                execute("kill "..musicPID)
                 musicPID = nil
             end
         end,
@@ -59,7 +62,7 @@ return {
         image = "final_lap.png",
         sound = "final_lap.mp3",
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -68,12 +71,12 @@ return {
     },
     endCourse = {
         loadFct = function ()
-            if not os.execute(("sleep %f"):format(math.random(50, 100) / 10)) then
+            if not execute(("sleep %f"):format(math.random(50, 100) / 10)) then
                 return true
             end
             turn = turn + 1
             if musicPID then
-                os.execute("kill "..musicPID)
+                execute("kill "..musicPID)
                 musicPID = nil
             end
         end,
@@ -87,9 +90,10 @@ return {
     {
         startFct = function ()
             if musicPID then
-                os.execute("kill "..musicPID)
+                execute("kill "..musicPID)
                 musicPID = nil
             end
+			turnDistance = turnDistance + 20
         end,
         name = "Star",
         effect = "",
@@ -98,13 +102,16 @@ return {
         sound = "star.mp3",
         delay = 30,
         endFct = function ()
-            local pfile = io.popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
         end,
     },
     {
+        startFct = function ()
+			turnDistance = 0
+        end,
         name = "Blue shell",
         effect = "sleep 2 && nmcli radio wifi off && nmcli radio wifi on",
         description = "The blue shell directly hits your wifi",
@@ -115,30 +122,31 @@ return {
     {
         name = "Bullet bill",
         startFct = function ()
-            os.execute("lua bulletbill.lua &")
-            os.execute("lua bulletbill.lua &")
-            os.execute("lua bulletbill.lua &")
-            os.execute("lua bulletbill.lua &")
+            execute("lua bulletbill.lua &")
+            execute("lua bulletbill.lua &")
+            execute("lua bulletbill.lua &")
+            execute("lua bulletbill.lua &")
+			turnDistance = turnDistance + 20
         end,
         effect = "",
         description = "Hyper speed !",
         image = "billou.png",
-        delay = 10,
-        notifDelay = 10
+        delay = 15
     },
     {
         name = "Banana",
         startFct = function ()
             for i = 1, 2 do
                 if
-                    not os.execute('sleep 0.2') or
-                    not os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted') or
-                    not os.execute('sleep 0.2') or
-                    not os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
+                    not execute('sleep 0.2') or
+                    not execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted') or
+                    not execute('sleep 0.2') or
+                    not execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
                 then
                     return true
                 end
             end
+			turnDistance = turnDistance / 2
         end,
         effect = "",
         description = "Your screen slips off the banana",
@@ -151,9 +159,10 @@ return {
         name = "Triple bananas",
         startFct = function ()
             for i = 1, 6 do
-                os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted')
-                os.execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
+                execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted')
+                execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal')
             end
+			turnDistance = turnDistance / 6
         end,
         effect = "",
         description = "Your screen slips off the bananas",
@@ -165,14 +174,15 @@ return {
     {
         name = "Thunder",
         startFct = function ()
-            local pfile = io.popen("xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '")
+            local pfile = popen("xrandr --verbose | grep -m 1 -i brightness | cut -f2 -d ' '")
 
             currentBrightness = tonumber(pfile:read())
             for i = 1, 10 do
-                os.execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %s'):format(i % 2 == 1 and "0" or "inf"))
-                os.execute("sleep 0.025")
+                execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %s'):format(i % 2 == 1 and "0" or "inf"))
+                execute("sleep 0.025")
             end
             pfile:close()
+			turnDistance = turnDistance / 10
         end,
         effect = 'xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness 0.2',
         description = "Boom !",
@@ -181,8 +191,8 @@ return {
         endFct = function ()
             for i = 1, 10 do
                 if
-                    not os.execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %f'):format(0.2 + 0.8 * currentBrightness * i / 10)) or
-                    not os.execute("sleep 0.025")
+                    not execute(('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness %f'):format(0.2 + 0.8 * currentBrightness * i / 10)) or
+                    not execute("sleep 0.025")
                 then
                     return true
                 end
@@ -194,7 +204,7 @@ return {
     {
         name = "Triple mushroom",
         startFct = function ()
-            local pfile = io.popen("xinput --list --short")
+            local pfile = popen("xinput --list --short")
             local line
 
             mouseDevices = {}
@@ -210,9 +220,13 @@ return {
                 local sensitivity = math.random(20, 90) / 10
 
                 for i, k in pairs(mouseDevices) do
-                    os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+                    execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
                 end
-                os.execute("sleep 2")
+				turnDistance = turnDistance + sensitivity
+				if debugMode then
+					print("[Triple mushroom]:New turnDistance -> "..tostring(turnDistance))
+				end
+                execute("sleep 2")
             end
         end,
         effect = '',
@@ -221,7 +235,7 @@ return {
         sound = "triple_mushroom.mp3",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
-                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+                execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
             end
         end,
         delay = 4,
@@ -230,9 +244,8 @@ return {
     {
         name = "Golden mushroom",
         startFct = function ()
-            local pfile = io.popen("xinput --list --short")
+            local pfile = popen("xinput --list --short")
             local line
-            local sensitivity = math.random(20, 50) / 10
 
             mouseDevices = {}
             pfile:read()
@@ -247,9 +260,13 @@ return {
                 local sensitivity = math.random(20, 200) / 10
 
                 for i, k in pairs(mouseDevices) do
-                    os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+                    execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
                 end
-                os.execute("sleep 0.5")
+				turnDistance = turnDistance + sensitivity / 8
+				if debugMode then
+					print("[Golden mushroom]:New turnDistance -> "..tostring(turnDistance))
+				end
+                execute("sleep 0.5")
             end
         end,
         effect = '',
@@ -258,7 +275,7 @@ return {
         sound = "golden_mushroom.mp3",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
-                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+                execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
             end
         end,
         delay = 0.5,
@@ -267,9 +284,9 @@ return {
     {
         name = "Mushroom",
         startFct = function ()
-            local pfile = io.popen("xinput --list --short")
+            local pfile = popen("xinput --list --short")
             local line
-            local sensitivity = math.random(20, 50) / 10
+            local sensitivity = math.random(20, 90) / 10
 
             mouseDevices = {}
             pfile:read()
@@ -281,8 +298,9 @@ return {
             end
             pfile:close()
             for i, k in pairs(mouseDevices) do
-                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
+                execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" %f 0 0 0 %f 0 0 0 1', k, sensitivity, sensitivity))
             end
+			turnDistance = turnDistance + sensitivity
         end,
         effect = '',
         description = "Faster !",
@@ -290,7 +308,7 @@ return {
         sound = "mushroom.mp3",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
-                os.execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
+                execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
             end
         end,
         delay = 5
@@ -298,19 +316,19 @@ return {
     {
         name = "Boo",
         startFct = function ()
-            local pfile = io.popen("./xdotool get_num_desktops")
+            local pfile = popen("./xdotool get_num_desktops")
             local nbOfWorkSpaces = tonumber(pfile:read())
             pfile:close()
 
-            pfile = io.popen("./xdotool search '.*' 2>/dev/null")
+            pfile = popen("./xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
             while line do
-                local pFile = io.popen("./xdotool getwindowname "..line.." 2>/dev/null")
+                local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
                 local name = pFile:read()
 
                 if name and name ~= "" and name ~= "wrapper-1.0" and name ~= "wrapper-2.0" and not name:gmatch("xf.*")() then
-                    os.execute("./xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
+                    execute("./xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
                 end
                 pFile:close()
                 line = pfile:read()
@@ -326,23 +344,23 @@ return {
     {
         name = "Boomerang",
         startFct = function ()
-            local pfile = io.popen("./xdotool get_num_desktops")
+            local pfile = popen("./xdotool get_num_desktops")
             local nbOfWorkSpaces = tonumber(pfile:read())
             local currentDesktop = 0
             pfile:close()
             
-            pfile = io.popen("./xdotool get_desktop")
+            pfile = popen("./xdotool get_desktop")
             currentDesktop = tonumber(pfile:read())
             pfile:close()
             
             for i = 0, nbOfWorkSpaces - 1 do
-                os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
-                os.execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
+                execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
             
             for i = nbOfWorkSpaces - 2, 0, -1 do
-                os.execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
-                os.execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
+                execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
         end,
         effect = '',
