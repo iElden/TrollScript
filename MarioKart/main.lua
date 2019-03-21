@@ -35,9 +35,17 @@ function getValue(tab, key, fct)
 end
 
 function main(...)
-    math.randomseed(os.time())
-    if #{...} ~= 0 then
-        for i, k in pairs({...}) do
+    local args = {...}
+
+    if args[1] == '--seed' and tonumber(args[2]) then
+       math.randomseed(tonumber(args[2]))
+       table.remove(args, 1)
+       table.remove(args, 1)
+    else
+       math.randomseed(os.time())
+    end
+    if #args ~= 0 then
+        for i, k in pairs(args) do
             executePayload(getValue(database, k, function (elem) return elem.name end))
         end
         return
