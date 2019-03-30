@@ -386,7 +386,13 @@ return {
 			local isMuted = infos[2] == "[off]"
 
 			pfile:close()
-			execute("amixer sset Master 100% > /dev/null")
+			if currentVolume <= 12.5 then
+				execute("amixer sset Master 25% > /dev/null")
+			elseif currentVolume >= 50 then
+				execute("amixer sset Master 100% > /dev/null")
+			else
+				execute(("amixer sset Master %i%% > /dev/null"):format(currentVolume * 2))
+			end
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
 			end
