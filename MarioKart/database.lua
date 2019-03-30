@@ -415,13 +415,6 @@ return {
     {
         name = "Mega mushroom",
         startFct = function ()
-			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &\necho $!")
-
-            if musicPID then
-                execute("kill "..musicPID)
-            end
-			musicPID = pfile:read()
-			pfile:close()
 			for i = 1, 3 do
 				os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 				os.execute("sleep 0.12")
@@ -430,16 +423,23 @@ return {
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 			os.execute("sleep 0.1")
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &\necho $!")
+			if musicPID then
+				execute("kill "..musicPID)
+			end
+			musicPID = pfile:read()
+			pfile:close()
+
         end,
         effect = '',
         description = "Bigger !",
         image = "mega_mushroom.png",
         sound = "mega_mushroom.mp3",
-        delay = 8,
+        delay = 7.5,
         notifDelay = 10,
         endFct = function ()
 			if turn then
-				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 -ss %d &>/dev/null &\necho $!"):format(turn == 3 and "2" or "", math.random(0, 50)))
 				
 				if musicPID then
 					execute("kill "..musicPID)
