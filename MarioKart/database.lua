@@ -418,8 +418,8 @@ return {
         description = "Bigger !",
         image = "mega_mushroom.png",
         sound = "mega_mushroom.mp3",
-        delay = 4,
-        notifDelay = 8,
+        delay = 6,
+        notifDelay = 10,
         endFct = function ()
 			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
 			for i = 1, 2 do
