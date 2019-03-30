@@ -400,7 +400,7 @@ return {
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
 			end
-			execute("ffplay -autoexit -nodisp sounds/horn.wav 2>/dev/null >/dev/null")
+			execute("ffplay -autoexit -nodisp sounds/horn.mp3 2>/dev/null >/dev/null")
 			execute(("amixer sset Master %i%% > /dev/null"):format(currentVolume))
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
@@ -436,16 +436,16 @@ return {
         delay = 10,
         notifDelay = 12,
         endFct = function ()
-			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
-			for i = 1, 2 do
-				os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
-				os.execute("sleep 0.05")
-			end
 			if turn then
 				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
 				
 				musicPID = pfile:read()
 				pfile:close()
+			end
+			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
+			for i = 1, 2 do
+				os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+				os.execute("sleep 0.05")
 			end
 			os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
         end,
