@@ -364,10 +364,68 @@ return {
             end
         end,
         effect = '',
-        description = "Attention à la tête !",
+        description = "Heads up !",
         image = "boomerang.png",
         sound = "boomerang.mp3",
         delay = 0,
         notifDelay = 2,
+    },
+    {
+        name = "Horn",
+        startFct = function ()
+            local pfile = popen("amixer sget Master")
+			
+			for i = 1, 5 do
+				pfile:read()
+			end
+
+			local line = pfile:read()
+			local it = line:gmatch("%b[]")
+			local infos = {it(), it()}
+			local currentVolume = tonumber(infos[1]:sub(2, #infos[1] - 2))
+			local isMuted = infos[2] == "[off]"
+
+			pfile:close()
+			execute("amixer sset Master 100% > /dev/null")
+			if isMuted then
+				execute("amixer sset Master toggle >/dev/null")
+			end
+			execute("ffplay -autoexit -nodisp sounds/horn.wav 2>/dev/null >/dev/null")
+			execute(("amixer sset Master %i%% > /dev/null"):format(currentVolume))
+			if isMuted then
+				execute("amixer sset Master toggle >/dev/null")
+			end
+        end,
+        effect = '',
+        description = "TUTUUUUUUUUT",
+        image = "horn.png",
+        delay = 0,
+        notifDelay = 4,
+    },
+    {
+        name = "Mega mushroom",
+        startFct = function ()
+			for i = 1, 3 do
+				os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+				os.execute("sleep 0.12")
+			end
+			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			os.execute("sleep 0.1")
+			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+        end,
+        effect = '',
+        description = "Bigger !",
+        image = "mega_mushroom.png",
+        sound = "mega_mushroom.mp3",
+        delay = 4,
+        notifDelay = 8,
+        endFct = function ()
+			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
+			for i = 1, 2 do
+				os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+				os.execute("sleep 0.05")
+			end
+			os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool keyup Alt")
+        end,
     }
 }
