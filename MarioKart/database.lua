@@ -409,6 +409,7 @@ return {
 				os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 				os.execute("sleep 0.12")
 			end
+			turnDistance = turnDistance + 10
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 			os.execute("sleep 0.1")
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
