@@ -62,10 +62,12 @@ return {
         image = "final_lap.png",
         sound = "final_lap.mp3",
         endFct = function ()
-            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
-            
-            musicPID = pfile:read()
-            pfile:close()
+			if turn then
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				
+				musicPID = pfile:read()
+				pfile:close()
+			end
         end,
         delay = 3
     },
@@ -102,10 +104,12 @@ return {
         sound = "star.mp3",
         delay = 30,
         endFct = function ()
-            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
-            
-            musicPID = pfile:read()
-            pfile:close()
+			if turn then
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				
+				musicPID = pfile:read()
+				pfile:close()
+			end
         end,
     },
     {
@@ -419,20 +423,31 @@ return {
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 			os.execute("sleep 0.1")
 			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+            if musicPID then
+                execute("kill "..musicPID)
+                musicPID = nil
+            end
+			os.execute("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &")
         end,
         effect = '',
         description = "Bigger !",
         image = "mega_mushroom.png",
         sound = "mega_mushroom.mp3",
-        delay = 6,
-        notifDelay = 10,
+        delay = 10,
+        notifDelay = 12,
         endFct = function ()
 			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
 			for i = 1, 2 do
 				os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
 				os.execute("sleep 0.05")
 			end
-			os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool keyup Alt")
+			if turn then
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				
+				musicPID = pfile:read()
+				pfile:close()
+			end
+			os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
         end,
     }
 }
