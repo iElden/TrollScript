@@ -439,7 +439,7 @@ return {
         notifDelay = 10,
         endFct = function ()
 			if turn then
-				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 -ss %d &>/dev/null &\necho $!"):format(turn == 3 and "2" or "", math.random(0, 50)))
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
 				
 				if musicPID then
 					execute("kill "..musicPID)
