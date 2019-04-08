@@ -3,6 +3,16 @@
 pcall(require, "signal")
 local database = dofile("./database.lua")
 
+function inWindowBlackList(name)
+    return
+    name == "" or
+    name == "wrapper-1.0" or
+    name == "wrapper-2.0" or
+    name:gmatch("xf.*")() or
+    name == "Bureau" or
+    name == "Desktop"
+end
+
 function execute(command)
     if debugMode then
         print("[execute]:        executing command \""..command.."\"")
@@ -72,6 +82,7 @@ function main(...)
     local showItems = false
     local seedSet = false
     local quit = false
+    local single = false
     local buff = 0
 
     turnDistance = 0
@@ -90,6 +101,8 @@ function main(...)
             showItems = true
             showDistance = true
             debugMode = true
+        elseif args[i] == "--single" then
+            single = true
         elseif args[i]:sub(1, 2) == "--" then
             error("Unknown flag "..args[i])
         else
@@ -132,6 +145,9 @@ function main(...)
         elseif turn == 3 and totalDistance >= 425 then
             executePayload(database.endCourse, debugMode)
             totalDistance = 0
+            if single then
+                break
+            end
             executePayload(database.begin)
         end
     end

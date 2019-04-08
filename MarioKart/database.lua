@@ -324,6 +324,7 @@ return {
             local nbOfWorkSpaces = tonumber(pfile:read())
             pfile:close()
 
+			execute("")
             pfile = popen("./xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
@@ -331,7 +332,7 @@ return {
                 local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
                 local name = pFile:read()
 
-                if name and name ~= "" and name ~= "wrapper-1.0" and name ~= "wrapper-2.0" and not name:gmatch("xf.*")() then
+                if name and not inWindowBlackList(name) then
                     execute("./xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
                 end
                 pFile:close()
@@ -416,13 +417,13 @@ return {
         name = "Mega mushroom",
         startFct = function ()
 			for i = 1, 3 do
-				os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
-				os.execute("sleep 0.12")
+				execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+				execute("sleep 0.12")
 			end
 			turnDistance = turnDistance + 10
-			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
-			os.execute("sleep 0.1")
-			os.execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			execute("sleep 0.1")
+			execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
 			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &\necho $!")
 			if musicPID then
 				execute("kill "..musicPID)
@@ -452,10 +453,50 @@ return {
             end
 			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
 			for i = 1, 2 do
-				os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
-				os.execute("sleep 0.05")
+				execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+				execute("sleep 0.05")
 			end
-			os.execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+			execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
         end,
+    },
+    {
+        name = "POW block",
+        startFct = function ()
+			execute("ffplay -autoexit -nodisp sounds/pow1.mp3 2>/dev/null >/dev/null &")
+			execute(("lua shakemouse.lua 10 100 %i &"):format(math.random(0, 65535)))
+			execute("sleep 1")
+			execute("ffplay -autoexit -nodisp sounds/pow2.mp3 2>/dev/null >/dev/null &")
+			execute(("lua shakemouse.lua 25 200 %i &"):format(math.random(0, 65535)))
+			execute("sleep 1")
+            local pfile = popen("./xdotool get_num_desktops")
+            local nbOfWorkSpaces = tonumber(pfile:read())
+            pfile:close()
+
+			execute(("lua shakemouse.lua 100 300 %i &"):format(math.random(0, 65535)))
+            pfile = popen("./xdotool search '.*' 2>/dev/null")
+            pfile:read()
+            line = pfile:read()
+			execute("ffplay -autoexit -nodisp sounds/pow3.mp3 2>/dev/null >/dev/null &")
+			if math.random(1, 2) == 1 then
+				execute("ffplay -autoexit -nodisp sounds/hit.mp3 2>/dev/null >/dev/null &")
+				turnDistance = 0
+			end
+            while line do
+                local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
+                local name = pFile:read()
+
+                if name and not inWindowBlackList(name) then
+					execute("./xdotool windowminimize "..line.. " 2>/dev/null")
+                end
+                pFile:close()
+                line = pfile:read()
+            end
+            pfile:close()
+        end,
+        effect = '',
+        description = "",
+        image = "pow.png",
+		delay = 0,
+        notifDelay = 6,
     }
 }
