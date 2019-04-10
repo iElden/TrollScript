@@ -324,7 +324,6 @@ return {
             local nbOfWorkSpaces = tonumber(pfile:read())
             pfile:close()
 
-			execute("")
             pfile = popen("./xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
@@ -389,14 +388,15 @@ return {
 			local infos = {it(), it()}
 			local currentVolume = tonumber(infos[1]:sub(2, #infos[1] - 2))
 			local isMuted = infos[2] == "[off]"
+			local multiplier = 1.5
 
 			pfile:close()
-			if currentVolume <= 12.5 then
+			if currentVolume * multiplier <= 25 then
 				execute("amixer sset Master 25% > /dev/null")
-			elseif currentVolume >= 50 then
+			elseif currentVolume * multiplier >= 100 then
 				execute("amixer sset Master 100% > /dev/null")
 			else
-				execute(("amixer sset Master %i%% > /dev/null"):format(currentVolume * 2))
+				execute(("amixer sset Master %i%% > /dev/null"):format(math.floor(currentVolume * multiplier)))
 			end
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
@@ -430,7 +430,7 @@ return {
 			end
 			musicPID = pfile:read()
 			pfile:close()
-
+			turnDistance = turnDistance + 10
         end,
         effect = '',
         description = "Bigger !",
