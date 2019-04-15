@@ -480,6 +480,7 @@ return {
 			if math.random(1, 2) == 1 then
 				execute("ffplay -autoexit -nodisp sounds/hit.mp3 2>/dev/null >/dev/null &")
 				turnDistance = 0
+                execute('sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted && sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal &')
 			end
             while line do
                 local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
