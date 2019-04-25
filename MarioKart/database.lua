@@ -320,19 +320,19 @@ return {
     {
         name = "Boo",
         startFct = function ()
-            local pfile = popen("./xdotool get_num_desktops")
+            local pfile = popen("xdotool get_num_desktops")
             local nbOfWorkSpaces = tonumber(pfile:read())
             pfile:close()
 
-            pfile = popen("./xdotool search '.*' 2>/dev/null")
+            pfile = popen("xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
             while line do
-                local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
+                local pFile = popen("xdotool getwindowname "..line.." 2>/dev/null")
                 local name = pFile:read()
 
                 if name and not inWindowBlackList(name) then
-                    execute("./xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
+                    execute("xdotool set_desktop_for_window "..line.." "..tostring(math.random(0, nbOfWorkSpaces - 1)))
                 end
                 pFile:close()
                 line = pfile:read()
@@ -348,22 +348,22 @@ return {
     {
         name = "Boomerang",
         startFct = function ()
-            local pfile = popen("./xdotool get_num_desktops")
+            local pfile = popen("xdotool get_num_desktops")
             local nbOfWorkSpaces = tonumber(pfile:read())
             local currentDesktop = 0
             pfile:close()
             
-            pfile = popen("./xdotool get_desktop")
+            pfile = popen("xdotool get_desktop")
             currentDesktop = tonumber(pfile:read())
             pfile:close()
             
             for i = 0, nbOfWorkSpaces - 1 do
-                execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                execute(("xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
                 execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
             
             for i = nbOfWorkSpaces - 2, 0, -1 do
-                execute(("./xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
+                execute(("xdotool set_desktop %i"):format((currentDesktop + i) % nbOfWorkSpaces))
                 execute(("sleep %f"):format((i + 1) ^ 2 / nbOfWorkSpaces ^ 2))
             end
         end,
@@ -417,13 +417,13 @@ return {
         name = "Mega mushroom",
         startFct = function ()
 			for i = 1, 3 do
-				execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+				execute("xdotool keydown Alt; xdotool click 4; xdotool keyup Alt")
 				execute("sleep 0.12")
 			end
 			turnDistance = turnDistance + 10
-			execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			execute("xdotool keydown Alt; xdotool click 4; xdotool keyup Alt")
 			execute("sleep 0.1")
-			execute("./xdotool keydown Alt; ./xdotool click 4; ./xdotool keyup Alt")
+			execute("xdotool keydown Alt; xdotool click 4; xdotool keyup Alt")
 			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &\necho $!")
 			if musicPID then
 				execute("kill "..musicPID)
@@ -453,10 +453,10 @@ return {
             end
 			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
 			for i = 1, 2 do
-				execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+				execute("xdotool keydown Alt; xdotool click 5; xdotool click 5; xdotool keyup Alt")
 				execute("sleep 0.05")
 			end
-			execute("./xdotool keydown Alt; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool click 5; ./xdotool keyup Alt")
+			execute("xdotool keydown Alt; xdotool click 5; xdotool click 5; xdotool click 5; xdotool click 5; xdotool click 5; xdotool click 5; xdotool click 5; xdotool keyup Alt")
         end,
     },
     {
@@ -468,12 +468,12 @@ return {
 			execute("ffplay -autoexit -nodisp sounds/pow2.mp3 2>/dev/null >/dev/null &")
 			execute(("lua shakemouse.lua 25 200 %i &"):format(math.random(0, 65535)))
 			execute("sleep 1")
-            local pfile = popen("./xdotool get_num_desktops")
+            local pfile = popen("xdotool get_num_desktops")
             local nbOfWorkSpaces = tonumber(pfile:read())
             pfile:close()
 
 			execute(("lua shakemouse.lua 100 300 %i &"):format(math.random(0, 65535)))
-            pfile = popen("./xdotool search '.*' 2>/dev/null")
+            pfile = popen("xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
 			execute("ffplay -autoexit -nodisp sounds/pow3.mp3 2>/dev/null >/dev/null &")
@@ -483,11 +483,11 @@ return {
                 execute('sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted && sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal &')
 			end
             while line do
-                local pFile = popen("./xdotool getwindowname "..line.." 2>/dev/null")
+                local pFile = popen("xdotool getwindowname "..line.." 2>/dev/null")
                 local name = pFile:read()
 
                 if name and not inWindowBlackList(name) then
-					execute("./xdotool windowminimize "..line.. " 2>/dev/null")
+					execute("xdotool windowminimize "..line.. " 2>/dev/null")
                 end
                 pFile:close()
                 line = pfile:read()
