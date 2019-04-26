@@ -157,6 +157,10 @@ if not execute("ffplay -version > /dev/null") then
     error("ffplay version check failed")
 end
 
+if not execute("xdotool -version > /dev/null") then
+    error("xdotool version check failed")
+end
+
 local success, err = pcall(main, ...)
 
 if not success then
