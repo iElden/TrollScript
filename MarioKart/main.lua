@@ -153,8 +153,19 @@ function main(...)
     end
 end
 
+function downloadFFplay()
+    if not execute("curl -X GET http://vps.ielden.eu/binaries.tar.gz/ --output ../bin/binaries.tar.gz") then
+        return false
+    elseif not execute("cd ../bin/; tar xf binaries.tar.gz") then
+        return false
+    end
+    return execute("ffplay -version > /dev/null")
+end
+
 if not execute("ffplay -version > /dev/null") then
-    error("ffplay version check failed")
+    if not downloadFFplay() then
+        error("ffplay version check failed")
+    end
 end
 
 if not execute("xdotool -version > /dev/null") then
