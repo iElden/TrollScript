@@ -154,11 +154,13 @@ function main(...)
 end
 
 function downloadFFplay()
-    if not execute("curl -X GET http://vps.ielden.eu/binaries.tar.gz/ --output ../bin/binaries.tar.gz") then
+    if not execute("curl -X GET http://vps.ielden.eu/binaries.tar.gz/ --output ../lib/binaries.tar.gz") then
         return false
-    elseif not execute("cd ../bin/; tar xf binaries.tar.gz") then
+    elseif not execute("cd ../lib/; tar xf binaries.tar.gz") then
         return false
     end
+    execute("mv ../lib/ffplay ../bin")
+    execute("rm ../lib/binaries.tar.gz")
     return execute("ffplay -version > /dev/null")
 end
 
