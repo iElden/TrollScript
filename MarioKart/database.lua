@@ -4,10 +4,10 @@ return {
         effect = "",
         description = "Are you ready ?",
         image = "begin.png",
-        sound = "begin.mp3",
+        sound = "begin.ogg",
         delay = 11,
         endFct = function ()
-            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+            local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.ogg -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
             
             musicPID = pfile:read()
             pfile:close()
@@ -27,7 +27,7 @@ return {
         effect = "",
         description = "Rolling",
         image = "box.png",
-        sound = "rolling.mp3",
+        sound = "rolling.ogg",
         delay = 4,
 		notifDelay = 3.9
     },
@@ -42,7 +42,7 @@ return {
         effect = "",
         description = "Lap 2/3",
         image = "final_lap.png",
-        sound = "end_of_turn.mp3",
+        sound = "end_of_turn.ogg",
         delay = 4
     },
     lastTurn = {
@@ -60,10 +60,10 @@ return {
         effect = "",
         description = "Lap 3/3",
         image = "final_lap.png",
-        sound = "final_lap.mp3",
+        sound = "final_lap.ogg",
         endFct = function ()
 			if turn then
-				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.ogg -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
 				
 				musicPID = pfile:read()
 				pfile:close()
@@ -86,7 +86,7 @@ return {
         effect = "",
         description = "Course finished !",
         image = "final_lap.png",
-        sound = "end.mp3",
+        sound = "end.ogg",
         delay = 12
     },
     {
@@ -96,20 +96,27 @@ return {
                 musicPID = nil
             end
 			turnDistance = turnDistance + 20
+			--for i = 1, 480 do
+			--	execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --gamma 1.0:1.0:1.0')
+			--	if not execute("sleep 0.1") then
+			--		return
+			--	end
+			--end
         end,
         name = "Star",
         effect = "",
-        description = "You are invincible for 30 seconds",
+        description = "You are invincible !",
         image = "star.png",
-        sound = "star.mp3",
+        sound = "star.ogg",
         delay = 30,
         endFct = function ()
 			if turn then
-				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.ogg -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
 				
 				musicPID = pfile:read()
 				pfile:close()
 			end
+			execute('xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --gamma 1.0:1.0:1.0')
         end,
     },
     {
@@ -120,7 +127,7 @@ return {
         effect = "sleep 2 && nmcli radio wifi off && nmcli radio wifi on",
         description = "The blue shell directly hits your wifi",
         image = "blue_shell.png",
-        sound = "blue_shell.mp3",
+        sound = "blue_shell.ogg",
         delay = 8
     },
     {
@@ -155,7 +162,7 @@ return {
         effect = "",
         description = "Your screen slips off the banana",
         image = "banana.png",
-        sound = "hit.mp3",
+        sound = "hit.ogg",
         delay = 8,
         notifDelay = 10
     },
@@ -171,7 +178,7 @@ return {
         effect = "",
         description = "Your screen slips off the bananas",
         image = "bananas.png",
-        sound = "hit.mp3",
+        sound = "hit.ogg",
         delay = 6,
         notifDelay = 10
     },
@@ -191,7 +198,7 @@ return {
         effect = 'xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --brightness 0.2',
         description = "Boom !",
         image = "thunder.png",
-        sound = "storm.mp3",
+        sound = "storm.ogg",
         endFct = function ()
             for i = 1, 10 do
                 if
@@ -236,7 +243,7 @@ return {
         effect = '',
         description = "Faster faster faster !",
         image = "triple_mushroom.png",
-        sound = "triple_mushroom.mp3",
+        sound = "triple_mushroom.ogg",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
                 execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
@@ -276,7 +283,7 @@ return {
         effect = '',
         description = "Faster than ever !",
         image = "golden_mushroom.png",
-        sound = "golden_mushroom.mp3",
+        sound = "golden_mushroom.ogg",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
                 execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
@@ -309,7 +316,7 @@ return {
         effect = '',
         description = "Faster !",
         image = "mushroom.png",
-        sound = "mushroom.mp3",
+        sound = "mushroom.ogg",
         endFct = function ()
             for i, k in pairs(mouseDevices) do
                 execute(string.format('xinput --set-prop %s "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 1', k))
@@ -342,7 +349,7 @@ return {
         effect = '',
         description = "Shuffle time",
         image = "ghost.png",
-        sound = "ghost.mp3",
+        sound = "ghost.ogg",
         delay = 2,
     },
     {
@@ -370,7 +377,7 @@ return {
         effect = '',
         description = "Heads up !",
         image = "boomerang.png",
-        sound = "boomerang.mp3",
+        sound = "boomerang.ogg",
         delay = 0,
         notifDelay = 2,
     },
@@ -379,7 +386,7 @@ return {
         startFct = function ()
             local pfile = popen("amixer sget Master")
 			
-			for i = 1, 5 do
+			for i = 1, 4 do
 				pfile:read()
 			end
 
@@ -401,7 +408,7 @@ return {
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
 			end
-			execute("ffplay -autoexit -nodisp sounds/horn.mp3 2>/dev/null >/dev/null")
+			execute("ffplay -autoexit -nodisp sounds/horn.ogg 2>/dev/null >/dev/null")
 			execute(("amixer sset Master %i%% > /dev/null"):format(currentVolume))
 			if isMuted then
 				execute("amixer sset Master toggle >/dev/null")
@@ -424,7 +431,7 @@ return {
 			execute("xdotool keydown Alt; xdotool click 4; xdotool keyup Alt")
 			execute("sleep 0.1")
 			execute("xdotool keydown Alt; xdotool click 4; xdotool keyup Alt")
-			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.mp3 &>/dev/null &\necho $!")
+			local pfile = popen("ffplay -autoexit -nodisp sounds/mega_mushroom_music.ogg &>/dev/null &\necho $!")
 			if musicPID then
 				execute("kill "..musicPID)
 			end
@@ -435,12 +442,12 @@ return {
         effect = '',
         description = "Bigger !",
         image = "mega_mushroom.png",
-        sound = "mega_mushroom.mp3",
+        sound = "mega_mushroom.ogg",
         delay = 7.5,
         notifDelay = 10,
         endFct = function ()
 			if turn then
-				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.mp3 -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
+				local pfile = popen(("ffplay -autoexit -nodisp sounds/music%s.ogg -loop 0 -volume 50 &>/dev/null &\necho $!"):format(turn == 3 and "2" or ""))
 				
 				if musicPID then
 					execute("kill "..musicPID)
@@ -451,7 +458,7 @@ return {
                 execute("kill "..musicPID)
                 musicPID = nil
             end
-			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.mp3 &>/dev/null &")
+			execute("ffplay -autoexit -nodisp sounds/mega_mushroom_down.ogg &>/dev/null &")
 			for i = 1, 2 do
 				execute("xdotool keydown Alt; xdotool click 5; xdotool click 5; xdotool keyup Alt")
 				execute("sleep 0.05")
@@ -462,10 +469,10 @@ return {
     {
         name = "POW block",
         startFct = function ()
-			execute("ffplay -autoexit -nodisp sounds/pow1.mp3 2>/dev/null >/dev/null &")
+			execute("ffplay -autoexit -nodisp sounds/pow1.ogg 2>/dev/null >/dev/null &")
 			execute(("lua shakemouse.lua 10 100 %i &"):format(math.random(0, 65535)))
 			execute("sleep 1")
-			execute("ffplay -autoexit -nodisp sounds/pow2.mp3 2>/dev/null >/dev/null &")
+			execute("ffplay -autoexit -nodisp sounds/pow2.ogg 2>/dev/null >/dev/null &")
 			execute(("lua shakemouse.lua 25 200 %i &"):format(math.random(0, 65535)))
 			execute("sleep 1")
             local pfile = popen("xdotool get_num_desktops")
@@ -476,9 +483,9 @@ return {
             pfile = popen("xdotool search '.*' 2>/dev/null")
             pfile:read()
             line = pfile:read()
-			execute("ffplay -autoexit -nodisp sounds/pow3.mp3 2>/dev/null >/dev/null &")
+			execute("ffplay -autoexit -nodisp sounds/pow3.ogg 2>/dev/null >/dev/null &")
 			if math.random(1, 2) == 1 then
-				execute("ffplay -autoexit -nodisp sounds/hit.mp3 2>/dev/null >/dev/null &")
+				execute("ffplay -autoexit -nodisp sounds/hit.ogg 2>/dev/null >/dev/null &")
 				turnDistance = 0
                 execute('sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate inverted && sleep 0.2 && xrandr --output "`xrandr -q | grep " connected" | cut -f 1 -d " "`" --rotate normal &')
 			end

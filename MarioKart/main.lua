@@ -154,13 +154,9 @@ function main(...)
 end
 
 function downloadFFplay()
-    if not execute("curl -X GET http://vps.ielden.eu/binaries.tar.gz/ --output ../lib/binaries.tar.gz") then
-        return false
-    elseif not execute("cd ../lib/; tar xf binaries.tar.gz") then
+    if not execute("gcc -o ../bin/ffplay ../my_ffplay.c -lcsfml-audio") then
         return false
     end
-    execute("mv ../lib/ffplay ../bin")
-    execute("rm ../lib/binaries.tar.gz")
     return execute("ffplay -version > /dev/null")
 end
 
@@ -178,7 +174,7 @@ local success, err = pcall(main, ...)
 
 if not success then
     if err:sub(#err - #"interrupted!" + 1, #err) ~= "interrupted!" then
-        execute(string.format('notify-send "Error" "%s" && ffplay -autoexit -nodisp sounds/boule_noire.mp3 &>/dev/null &', err))
+        execute(string.format('notify-send "Error" "%s" && ffplay -autoexit -nodisp sounds/boule_noire.ogg &>/dev/null &', err))
         print(err)
     end
     if musicPID then
